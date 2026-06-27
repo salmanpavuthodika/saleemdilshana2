@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Islamic Wedding Invitation",
+  "description": "A premium, elegant Islamic wedding invitation microsite for Mohammed Saleem \u0026 Dhilshana Suman, featuring a countdown timer, scratch-to-reveal date cards, parallax effects, and a digital guest wishes board.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

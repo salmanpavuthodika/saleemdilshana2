@@ -1,0 +1,44 @@
+{
+  "entities": {
+    "Wish": {
+      "title": "Wish",
+      "description": "A guest wish or prayer for the couple",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "message": { "type": "string" },
+        "color": { "type": "string" },
+        "rotation": { "type": "number" },
+        "timestamp": { "type": "number" }
+      },
+      "required": ["id", "name", "message", "color", "rotation", "timestamp"]
+    },
+    "Moment": {
+      "title": "Moment",
+      "description": "A captured wedding moment with image URL, caption, and details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "url": { "type": "string" },
+        "alt": { "type": "string" },
+        "caption": { "type": "string" },
+        "description": { "type": "string" },
+        "section": { "type": "string" },
+        "order": { "type": "number" },
+        "timestamp": { "type": "number" }
+      },
+      "required": ["id", "url", "alt", "caption", "description", "section", "order", "timestamp"]
+    }
+  },
+  "firestore": {
+    "wishes/{wishId}": {
+      "schema": "Wish",
+      "description": "Collection of wedding wishes from guests"
+    },
+    "moments/{momentId}": {
+      "schema": "Moment",
+      "description": "Collection of captured wedding moments"
+    }
+  }
+}
