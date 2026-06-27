@@ -15,7 +15,7 @@ import ScratchCard from "./components/ScratchCard";
 import WishesSection from "./components/WishesSection";
 import GallerySection from "./components/GallerySection";
 import MusicPlayer from "./components/MusicPlayer";
-import { StageDecor, PetalRain, ProphetDuaCard, SwayingLantern } from "./components/IslamicLoveDecor";
+import { PetalRain, ProphetDuaCard, SwayingLantern } from "./components/IslamicLoveDecor";
 
 export default function App() {
   const [isEnvelopeOpened, setIsEnvelopeOpened] = useState(false);
@@ -218,14 +218,19 @@ export default function App() {
         >
           {/* Parallax Background */}
           <motion.div 
-            className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?auto=format&fit=crop&q=80&w=1920')] bg-cover bg-center opacity-[0.03]"
-            style={{ y: heroY, scale: 1.1 }}
-          />
-          <div className="absolute inset-0 islamic-pattern opacity-[0.06]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#032b1a]/20 via-[#032b1a]/85 to-[#032b1a]" />
-
-          {/* Wedding Stage Backdrop Decoration */}
-          <StageDecor />
+            className="absolute inset-0 pointer-events-none select-none"
+            style={{ y: heroY }}
+          >
+            <img 
+              src="/WhatsApp Image 2026-06-26 at 20.08.33.jpeg" 
+              alt="Wedding Celebration Background" 
+              className="w-full h-full object-cover scale-125"
+              style={{ opacity: 0.85 }}
+              referrerPolicy="no-referrer"
+            />
+          </motion.div>
+          <div className="absolute inset-0 islamic-pattern opacity-[0.03]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#021a10]/20 via-[#021a10]/50 to-[#021a10]/85" />
 
           {/* Golden Arch Accent Line */}
           <motion.div 
