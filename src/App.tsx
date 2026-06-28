@@ -79,6 +79,9 @@ export default function App() {
   // Synchronously play audio within user gesture click stack for perfect browser compatibility
   const handlePlayMusicOnReveal = () => {
     if (audioRef.current) {
+      // Force reload the /bg-music.mp3 source to capture the updated file in the public folder
+      audioRef.current.src = AUDIO_CANDIDATES[0];
+      audioRef.current.load();
       audioRef.current.play().catch((err) => {
         console.warn("Autoplay or play call blocked by browser:", err);
       });
@@ -86,7 +89,20 @@ export default function App() {
   };
 
   const toggleMute = () => {
-    setIsMuted(prev => !prev);
+    setIsMuted((prev) => {
+      const nextMuted = !prev;
+      if (audioRef.current) {
+        audioRef.current.muted = nextMuted;
+        if (!nextMuted) {
+          audioRef.current.play().catch((err) => {
+            console.warn("Play on unmute failed:", err);
+          });
+        } else {
+          audioRef.current.pause();
+        }
+      }
+      return nextMuted;
+    });
   };
 
   // References for parallax scrolling effects
@@ -94,13 +110,10 @@ export default function App() {
   const messageSleeveRef = useRef<HTMLDivElement>(null);
 
   // 1. Hero Scroll Transformations (Smooth Title Scaling & Background Dim)
-  const heroScroll = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"]
-  });
-  const heroY = useTransform(heroScroll.scrollYProgress, [0, 1], [0, 100]);
-  const heroScale = useTransform(heroScroll.scrollYProgress, [0, 1], [1, 0.95]);
-  const heroOpacity = useTransform(heroScroll.scrollYProgress, [0, 0.8], [1, 0]);
+  const { scrollY } = useScroll();
+  const heroY = useTransform(scrollY, [0, 1000], [0, 180]);
+  const heroScale = useTransform(scrollY, [0, 1000], [1, 0.95]);
+  const heroOpacity = useTransform(scrollY, [0, 800], [1, 0]);
 
   // 2. Invitation Message Sliding Out of Envelope Sleeve on Scroll
   const { scrollYProgress: envelopeScrollYProgress } = useScroll({
@@ -116,7 +129,6 @@ export default function App() {
   // 3. Photo Parallax is handled dynamically within GallerySection
 
   // 4. Background scroll-linked parallax elements for subtle 3D depth
-  const { scrollY } = useScroll();
   const decoY1 = useTransform(scrollY, [0, 1000], [0, -120]);
   const decoY2 = useTransform(scrollY, [0, 2500], [0, 180]);
   const decoY3 = useTransform(scrollY, [0, 4000], [0, -150]);
@@ -217,20 +229,21 @@ export default function App() {
           className="relative min-h-screen flex flex-col justify-center items-center px-6 text-center overflow-hidden border-b border-[#DCD0C0]/50"
         >
           {/* Parallax Background */}
-          <motion.div 
-            className="absolute inset-0 pointer-events-none select-none"
-            style={{ y: heroY }}
-          >
-            <img 
+          <div className="absolute inset-0 overflow-hidden pointer-events-none select-none">
+            <motion.img 
               src="/WhatsApp Image 2026-06-26 at 20.08.33.jpeg" 
               alt="Wedding Celebration Background" 
-              className="w-full h-full object-cover scale-125"
-              style={{ opacity: 0.85 }}
+              className="w-full h-[140%] object-cover absolute left-0"
+              style={{ 
+                y: useTransform(scrollY, [0, 1000], ["-5%", "15%"]), 
+                opacity: 0.85, 
+                objectPosition: "center 18%" 
+              }}
               referrerPolicy="no-referrer"
             />
-          </motion.div>
+          </div>
           <div className="absolute inset-0 islamic-pattern opacity-[0.03]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#021a10]/20 via-[#021a10]/50 to-[#021a10]/85" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#021a10]/15 via-[#021a10]/45 to-[#021a10]/90" />
 
           {/* Golden Arch Accent Line */}
           <motion.div 
@@ -250,14 +263,6 @@ export default function App() {
             style={{ scale: heroScale, opacity: heroOpacity }}
             className="max-w-3xl z-10 space-y-4"
           >
-            {/* Islamic Quranic Verse/Bismillah calligraphy subtitle */}
-            <span className="block font-serif italic text-[#EBD89B] text-sm tracking-wide md:text-base max-w-xl mx-auto px-4 leading-relaxed">
-              "And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy."
-              <span className="block font-sans text-[9px] uppercase tracking-widest text-[#C2A289] mt-2">
-                — SURAH AR-RUM [30:21]
-              </span>
-            </span>
-
             {/* Floral Golden Divider */}
             <div className="flex items-center justify-center gap-4 my-8">
               <div className="h-[1px] w-12 md:w-20 bg-gradient-to-r from-transparent to-[#C2A289]/40" />
@@ -271,7 +276,7 @@ export default function App() {
             </span>
 
             {/* Couples Names Display */}
-            <h1 className="font-decorative text-4xl sm:text-5xl md:text-6xl font-bold text-[#ebd89b] py-2 leading-tight">
+            <h1 className="font-cinzel text-4xl sm:text-5xl md:text-6xl font-normal text-[#ebd89b] py-2 leading-tight tracking-wide">
               Mohammed Saleem
             </h1>
             
@@ -279,7 +284,7 @@ export default function App() {
               &
             </p>
 
-            <h1 className="font-decorative text-4xl sm:text-5xl md:text-6xl font-bold text-[#ebd89b] py-2 leading-tight">
+            <h1 className="font-cinzel text-4xl sm:text-5xl md:text-6xl font-normal text-[#ebd89b] py-2 leading-tight tracking-wide">
               Dhilshana Suman
             </h1>
 
@@ -289,11 +294,6 @@ export default function App() {
               <div className="w-1.5 h-1.5 rounded-full bg-[#C2A289] mx-1 shadow-sm" />
               <div className="w-1 h-1 rounded-full bg-[#DCD0C0] mx-1" />
             </div>
-
-            {/* Mini location summary */}
-            <p className="font-serif italic text-sm md:text-base text-[#E8E2D5] max-w-md mx-auto">
-              Join us in our joy as we embark on a lifetime of faith, love, and devotion.
-            </p>
           </motion.div>
 
           {/* Bounce Down Indicator */}
