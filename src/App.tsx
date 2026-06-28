@@ -233,11 +233,10 @@ export default function App() {
             <motion.img 
               src="/WhatsApp Image 2026-06-26 at 20.08.33.jpeg" 
               alt="Wedding Celebration Background" 
-              className="w-full h-[140%] object-cover absolute left-0"
+              className="w-full h-[130%] object-cover absolute left-0 object-[52%_50%] md:object-[50%_50%]"
               style={{ 
-                y: useTransform(scrollY, [0, 1000], ["-5%", "15%"]), 
-                opacity: 0.85, 
-                objectPosition: "center 18%" 
+                y: useTransform(scrollY, [0, 1000], ["-3%", "12%"]), 
+                opacity: 0.85 
               }}
               referrerPolicy="no-referrer"
             />
